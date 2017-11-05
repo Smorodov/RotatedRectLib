@@ -1,3 +1,4 @@
+![Alt text](https://travis-ci.org/Smorodov/RotatedRectLib.svg?branch=master)
 #  RotatedRectLib
 
 Small library for working with rotated rectangle shaped image regions.
