@@ -14,8 +14,8 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 # ----------------------------------------------------------------------------  
 # ищем все .cpp и .h файлы и добавляем их в наш проект 
 # ----------------------------------------------------------------------------
-  set(folder_source main.cpp RR_lib.cpp)
-  set(folder_header  RR_lib.h)
+  set(folder_source main.cpp RR_Lib.cpp)
+  set(folder_header  RR_Lib.h)
   SOURCE_GROUP("Source Files" FILES ${folder_source})
   SOURCE_GROUP("Header Files" FILES ${folder_header})
 # ----------------------------------------------------------------------------  
