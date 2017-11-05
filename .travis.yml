@@ -46,6 +46,5 @@ install:
 script:
   #- cd [project_dir]
   - cmake .
-  - cd build
   - make
   #- ./cvRotatedRectLib
