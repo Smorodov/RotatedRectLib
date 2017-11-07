@@ -255,7 +255,7 @@ namespace RRLib {
         rr.points(rect_points);
         for (int j = 0; j < 4; j++)
         {
-            line(img, rect_points[j], rect_points[(j + 1) % 4], color, width, CV_AA);
+            line(img, rect_points[j], rect_points[(j + 1) % 4], color, width, cv::LINE_AA);
         }
     }
 }
