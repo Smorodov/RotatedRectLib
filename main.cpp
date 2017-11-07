@@ -6,13 +6,14 @@ using namespace cv;
 //-----------------------------------------------------------------------------------------------------
 int main(int argc, char** argv)
 {
-	Mat img = imread("../lena.jpg", 1);
-
+	Mat img = cv::imread("../lena.jpg", 1);
+    Mat img_bak = img.clone();
 	if (img.empty())
 	{
 		return 0;
 	}
 
+    // Set rotated region to extract fragment
 	RotatedRect rr;
 	rr.center = cv::Point2f(256, 256);
 	rr.angle = 10;
@@ -20,21 +21,42 @@ int main(int argc, char** argv)
 	rr.size.height = 150;
 
 	Mat fragment;
-	getRotRectImg(rr, img, fragment);
-    drawRR(img, rr, cv::Scalar(255, 0, 0),2);
-	imshow("extracted fragment", fragment);
+    // Extract fragment
+	RRLib::getRotRectImg(rr, img, fragment);
+    // Show where we extracted it from
+    RRLib::drawRR(img, rr, cv::Scalar(255, 0, 0),2);
+	imshow("extracting fragment", fragment);
 
+
+    // restore image
+    img = img_bak.clone();
+    // get piece of image
 	cv::Rect src_roi = Rect(0, 0, fragment.cols, fragment.rows);
-	rr.center = cv::Point2f(128, 128);
-	copyToRotRectImg(src_roi, rr, fragment, img);
-	drawRR(img, rr, cv::Scalar(255, 255, 0), 2);
-	imshow("inserted fragment", img);
-
+    // set target roi
 	rr.center = cv::Point2f(300, 300);
 	rr.angle = -30;
-	copyToRotRectImg(src_roi, rr, fragment, img);
-	drawRR(img, rr, cv::Scalar(255, 0, 255), 2);
-	imshow("inserted fragment 2", img);
+    // paste it to image
+	RRLib::copyToRotRectImg(src_roi, rr, fragment, img);
+    // draw frame around
+	RRLib::drawRR(img, rr, cv::Scalar(255, 0, 255), 2);
+	imshow("inserted fragment simple", img);
+
+
+    // restore image
+    img = img_bak.clone();
+    rr.center = cv::Point2f(150, 350);
+    rr.angle = -60;
+
+    // create mask
+    Mat mask = Mat::zeros(fragment.size(), CV_8UC3);
+    circle(mask, Point(fragment.cols / 2, fragment.rows / 2), fragment.rows / 2, Scalar::all(255),-1);
+    GaussianBlur(mask, mask, Size(25, 25), 17);
+    normalize(mask, mask, 0, 255, cv::NORM_MINMAX);
+
+    // paste with mask (it really blending)
+    RRLib::copyToRotRectImg(rr, fragment,mask, img);
+    RRLib::drawRR(img, rr, cv::Scalar(255, 0, 255), 2);
+    imshow("inserted fragment with mask", img);
 
 	waitKey();
 
