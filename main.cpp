@@ -25,8 +25,8 @@ int main(int argc, char** argv)
 	RRLib::getRotRectImg(rr, img, fragment);
     // Show where we extracted it from
     RRLib::drawRR(img, rr, cv::Scalar(255, 0, 0),2);
-	imshow("extracting fragment", fragment);
-
+	imshow("extracted fragment", fragment);
+    imshow("extracting fragment", img);
 
     // restore image
     img = img_bak.clone();
